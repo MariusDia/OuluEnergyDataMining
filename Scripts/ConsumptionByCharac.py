@@ -23,7 +23,7 @@ def consumptionByCategoricalCharacteristic(characteristic, start_time=datetime(2
                                                 'Valid Data': [0 for i in range(characteristicRange)]}
 
     # To find the buildings' id for each different characteristic
-    idsByUse = pd.DataFrame(columns=[characteristic, "property_id", "average_heat", "average_electricity"])
+    idsByCharac = pd.DataFrame(columns=[characteristic, "property_id", "average_heat", "average_electricity"])
 
     for charElement in characteristic_list:
         charDF = meta_df.loc[(meta_df[characteristic] == charElement)][0:nbOfBuildingByCharacteristic]
@@ -48,10 +48,10 @@ def consumptionByCategoricalCharacteristic(characteristic, start_time=datetime(2
                        "average_heat": mean[0],
                        "average_electricity": mean[1]}
 
-                idsByUse = idsByUse.append(dic, ignore_index=True)
+                idsByCharac = idsByCharac.append(dic, ignore_index=True)
 
     # General means by use
-    meanByCharacteristicDF = idsByUse.groupby(characteristic).mean()
+    meanByCharacteristicDF = idsByCharac.groupby(characteristic).mean()
     meanByCharacteristicDF = meanByCharacteristicDF.reset_index()
 
     print(meanByCharacteristicDF)
@@ -61,7 +61,7 @@ def consumptionByCategoricalCharacteristic(characteristic, start_time=datetime(2
 
     missingValidDataDF = pd.DataFrame.from_dict(missingValidPropertyDataByCharacteristic)
     missingValidDataDF = missingValidDataDF.set_index(characteristic)
-    meanByCharacteristicDF = meanByCharacteristicDF.drop("property_id", axis=1)
+    meanByCharacteristicDF = meanByCharacteristicDF.drop("property_id", axis=1, errors="ignore")
 
     print(missingValidDataDF)
 
@@ -82,9 +82,9 @@ def consumptionByCategoricalCharacteristic(characteristic, start_time=datetime(2
               fontsize=16)
 
     fig = fig.get_figure()
-    fig.savefig('../Graphs/' + characteristic + '/' + characteristic + 'MissingData.png')
+    fig.savefig('../Graphs_dropna/' + characteristic + '/' + characteristic + 'MissingData.png')
 
-    plt.show()
+    #plt.show()
 
     # To plot the Proportion of missing/invalid vs valid values-------------------------
 
@@ -132,9 +132,9 @@ def consumptionByCategoricalCharacteristic(characteristic, start_time=datetime(2
                          fontweight="bold")
 
     fig = fig.get_figure()
-    fig.savefig('../Graphs/' + characteristic + '/ ' + characteristic + 'ProportionMissingData.png')
+    fig.savefig('../Graphs_dropna/' + characteristic + '/ ' + characteristic + 'ProportionMissingData.png')
 
-    plt.show()
+    #plt.show()
 
     # To plot the average energy consumption of by characteristic-------------------------
 
@@ -153,18 +153,24 @@ def consumptionByCategoricalCharacteristic(characteristic, start_time=datetime(2
               + "(N: number of valid samples)", fontweight="bold", fontsize=16)
 
     fig = fig.get_figure()
-    fig.savefig('../Graphs/' + characteristic + '/averageConsumptionBy' + characteristic + '.png')
+    fig.savefig('../Graphs_dropna/' + characteristic + '/averageConsumptionBy' + characteristic + '.png')
 
-    plt.show()
+    #plt.show()"floorcount", "intended_use"
 
 
 
-categoricalCharacteristics = ["floorcount", "intended_use", "postal_code", "district_name", "year_built"]
+categoricalCharacteristics = ["intended_use","district_name", "year_built", "floorcount", "postal_code"]
+
 for char in categoricalCharacteristics:
+    print("Starting................")
+    print(char)
+
     nbOfBuildingByCharacteristic = 30
-    characteristicRange = 10
+    characteristicRange = 6
     if char == "floorcount":
         characteristicRange = 6
 
     consumptionByCategoricalCharacteristic(char, nbOfBuildingByCharacteristic=nbOfBuildingByCharacteristic,
                                            characteristicRange=characteristicRange)
+
+    print("Done................")

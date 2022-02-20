@@ -1,20 +1,37 @@
 import pandas as pd
-import numpy as np
-from numpy import asarray
-from numpy import savetxt
-
 from deep_translator import GoogleTranslator
+from os.path import exists
+import csv
+
+with open('../Data/forbiden_ids.csv', newline='') as f:
+    reader = csv.reader(f)
+    forbiden_ids = list(reader)[2]
+forbiden_ids=list(map(float, forbiden_ids))
 
 
 class Characteristics():
-    def __init__(self, csv_file=None):
-        """self.csv_file = csv_file
-        if not csv_file:
-            self.metadata_df = pd.read_csv('../ids_properties.csv')
+    def __init__(self):
+        if not exists("../Data/translated_metadata.pkl"):
+            bas_df = pd.read_csv('ids_properties.csv')
+
+            # To remove buildings without records
+            forbiden_df = bas_df[bas_df['property_id'].isin(forbiden_ids)]
+            bas_df = bas_df.drop(forbiden_df.index)
+
+            # Translate intended uses
+            translateIntendedUse(bas_df)
+
+            # Reseting indexes
+            bas_df = bas_df.reset_index(drop=True)
+
+            self.metadata_df = bas_df
+
+            # Download df to a pkl file
+            self.metadata_df.to_pickle("../Data/translated_metadata.pkl")
+
         else:
-            self.metadata_df = pd.read_csv(csv_file)
-        translateIntendedUse(self.metadata_df)"""
-        self.metadata_df = pd.read_pickle("../translated_metadata.pkl")
+            print("It exists")
+            self.metadata_df = pd.read_pickle("../Data/translated_metadata.pkl")
 
 
 def translateIntendedUse(df):
@@ -35,17 +52,3 @@ def translateIntendedUse(df):
 
     # Putting the new normalized column to the df
     df["intended_use"] = new_use_list
-
-
-# Test
-"""meta_df = pd.read_csv('../ids_properties.csv')
-translateConsumption(meta_df)
-
-print(meta_df.head())
-
-print("The most occurring building intended uses:")
-print(meta_df["intended_use"].value_counts(dropna=False)[0:10])
-
-print("Properties' id")
-unique_ids = asarray([ meta_df["property_id"].unique() ])
-savetxt('unique_ids.csv', unique_ids, delimiter=',')"""

@@ -72,6 +72,7 @@ class Retrospective():
 
         return energy_means
 
+    # Abandoned for now
     def getMeanEnergyByPropertyDF(self, single_id):
         """
         Returns the average (heat and electricity if both are selected) consumption of one property (chosen by its id) as a Dataframe

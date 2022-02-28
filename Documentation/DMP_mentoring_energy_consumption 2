@@ -1,0 +1,66 @@
+DMP mentoring 2
+
+ROLES
+
+    Marius
+    - Function to retrieve hourly data done.
+    - Data transformed into a pandas DataFrame, datetime column has been formed
+      from the time related columns.
+    - Average energy consumption (of all time) has been fetched for each id.
+    - Energy consumption related to floor count of the building has been studied.
+    - Plan: check missing data in each characteristic and see which ones are
+      usable for analysis.
+    
+    Mari
+    - Has checked on research and energy consumption related statistics.
+    - Word project file created and shared.
+    - Plan: Writing the report, literature review, introduction.
+    - Sources for articles:
+            - IEEE (check if journal article/conference paper)
+            - ScienceDirect: Elsevier's (publisher) material
+            - ResearchGate
+    - Future recommendation: Overleaf for writing scientific text. Co-operative
+      platform for LaTeX documents.
+    
+    Mussadaq
+    - Has done initial studying of clustering methods/functions to use. k-means
+      a potential choice.
+    - A suggestion for "easy" start on clustering: cluster daily energy
+      consumption profiles of one ID (building).
+            -> get clusters of week days, summer days, weekend days?
+    - Plan: form understanding of the data structure and perform clustering for
+      energy consumption data.
+    - Notes on data structure:
+            - Time series data.
+            - Time is x-axis, has to be collected from time related columns:
+              year, day, month hour. (Done by Marius)
+            - Consumption is the y-axis. 
+            - If you choose data corresponding to ONE ID, you have the time
+              series data of one building.
+    
+    Arttu
+    - Has searched for some clustering tutorials.
+    - Plan: Study the energy consumption on different districts. 
+
+
+
+RESEARCH QUESTION
+    - Plan is to do clustering along with studying the effect of building
+      characteristics (including postal code area)
+    - Researching building characteristics' effect on energy consumption creates
+      understanding of the data, and allows interpretation of clustering
+      results.
+
+CHALLENGES
+    - Missing data.
+           - Note on this: If missing data mostly in buildings'
+             characteristics, it might not be a big issue for clustering, since
+             clustering might be done without using those features. 
+    - Dividing roles: discuss and recheck that everyone's role is suitable.
+
+OTHER NOTES
+    - Hourly data is meaning for clustering. For researching the building
+      characteristics however, monthly or even yearly consumption might be more
+      relevant. Consider the choice of necessary time resolution!
+
+

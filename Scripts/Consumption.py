@@ -26,15 +26,15 @@ class Retrospective():
         for y in range(year_difference + 1):
             years.append(start_year + y)
 
-        bas_df = retrievePropertiesConsumptionByYear(property_ids, years)
+        bas_df = self.retrievePropertiesConsumptionByYear(property_ids, years)
 
         if not bas_df.empty:
 
-            replaceTime(bas_df)
+            self.replaceTime(bas_df)
 
-            translateConsumption(bas_df)
+            self.translateConsumption(bas_df)
 
-            bas_df = selectTimeObservation(bas_df, start_time, end_time)
+            bas_df = self.selectTimeObservation(bas_df, start_time, end_time)
 
             if dropna:
                 bas_df.dropna(inplace=True)
@@ -83,63 +83,63 @@ class Retrospective():
         single_id_df = self.consumption_df[self.consumption_df["property_id"] == single_id]
 
 
-def retrievePropertiesConsumptionByYear(ids, years):
-    """
-    Return a dataframe containing the energy consumption of properties listed by their ids during certain years
-    """
-
-    def my_query(args):
+    def retrievePropertiesConsumptionByYear(self, ids, years):
         """
-        Format a query using args: (id, year).
+        Return a dataframe containing the energy consumption of properties listed by their ids during certain years
         """
-        query = (hourly_url
-                 + "?property_id=eq."
-                 + str(args[0])
-                 + "&year=eq."
-                 + str(args[1])
-                 )
-        return query
 
-    q_args = product(ids, years)
-    # form a query per each id+year combination:
-    queries = [my_query(p) for p in q_args]
-    dfs = [pd.read_json(q) for q in queries]  # fetch data for each query
+        def my_query(args):
+            """
+            Format a query using args: (id, year).
+            """
+            query = (hourly_url
+                     + "?property_id=eq."
+                     + str(args[0])
+                     + "&year=eq."
+                     + str(args[1])
+                     )
+            return query
 
-    return pd.concat(dfs)
+        q_args = product(ids, years)
+        # form a query per each id+year combination:
+        queries = [my_query(p) for p in q_args]
+        dfs = [pd.read_json(q) for q in queries]  # fetch data for each query
 
-
-def replaceTime(df):
-    """
-    replace the four columns of time (year, month, day and hour) by only one normalized column using datetime library
-    """
-
-    # Saving times
-    timeDf = df[["year", "month", "day", "starting_hour"]].values.tolist()
-
-    # COnverting to datetime type
-    new_time_list = [datetime(time[0], time[1], time[2], time[3]) for time in timeDf]
-
-    # Deleting obsolete columns
-    df.drop("year", axis=1, inplace=True)
-    df.drop("month", axis=1, inplace=True)
-    df.drop("day", axis=1, inplace=True)
-    df.drop("starting_hour", axis=1, inplace=True)
-
-    # Putting the new normalized column to the df
-    df["datetime"] = new_time_list
-    df.sort_values(by="datetime")
+        return pd.concat(dfs)
 
 
-def selectTimeObservation(df, start_time, end_time):
-    """
-    Returns the dataframe df during a more precise time interval [start_time, end_time],
-    with the hour, the day, the month and the year.
-    """
-    return df.loc[(df['datetime'] >= start_time) & (df['datetime'] < end_time)]
+    def replaceTime(self, df):
+        """
+        replace the four columns of time (year, month, day and hour) by only one normalized column using datetime library
+        """
+
+        # Saving times
+        timeDf = df[["year", "month", "day", "starting_hour"]].values.tolist()
+
+        # COnverting to datetime type
+        new_time_list = [datetime(time[0], time[1], time[2], time[3]) for time in timeDf]
+
+        # Deleting obsolete columns
+        df.drop("year", axis=1, inplace=True)
+        df.drop("month", axis=1, inplace=True)
+        df.drop("day", axis=1, inplace=True)
+        df.drop("starting_hour", axis=1, inplace=True)
+
+        # Putting the new normalized column to the df
+        df["datetime"] = new_time_list
+        df.sort_values(by="datetime")
 
 
-def translateConsumption(df):
-    df["consumption_measure"].replace({"Lämpö": "Heat", "Sähkö": "Electricity"}, inplace=True)
+    def selectTimeObservation(self, df, start_time, end_time):
+        """
+        Returns the dataframe df during a more precise time interval [start_time, end_time],
+        with the hour, the day, the month and the year.
+        """
+        return df.loc[(df['datetime'] >= start_time) & (df['datetime'] < end_time)]
+
+
+    def translateConsumption(self, df):
+        df["consumption_measure"].replace({"Lämpö": "Heat", "Sähkö": "Electricity"}, inplace=True)
 
 
 # Test
@@ -155,4 +155,7 @@ print("Properties' id")
 print(retro.consumption_df["property_id"].value_counts(dropna=False))
 
 print("Consumption average of property 622506")
-print(retro.getMeanEnergyByProperty(622506))"""
+print(retro.getMeanEnergyByProperty(622506))
+
+print("Consumption average of property 619401")
+print(retro.getMeanEnergyByProperty(619401))"""

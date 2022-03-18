@@ -30,7 +30,7 @@ class Characteristics():
             self.metadata_df.to_pickle("../Data/translated_metadata.pkl")
 
         else:
-            print("It exists")
+            print("The metadata is already downloaded")
             self.metadata_df = pd.read_pickle("../Data/translated_metadata.pkl")
 
 

@@ -274,13 +274,13 @@ def consumptionByContinuousCharacteristic(characteristic, start_time=datetime(20
 
 
 # ---------
-"""categoricalCharacteristics = ["intended_use", "district_name", "year_built", "floorcount", "postal_code"]
+categoricalCharacteristics = ["intended_use", "district_name", "year_built", "floorcount", "postal_code"]
 
 for char in categoricalCharacteristics:
     print("Starting................")
     print(char)
 
-    nbOfBuildingByCharacteristic = 30
+    nbOfBuildingByCharacteristic = 100
     characteristicRange = 6
     if char == "floorcount":
         characteristicRange = 6
@@ -288,18 +288,18 @@ for char in categoricalCharacteristics:
     consumptionByCategoricalCharacteristic(char, nbOfBuildingByCharacteristic=nbOfBuildingByCharacteristic,
                                            characteristicRange=characteristicRange)
 
-    print("Done................")"""
+    print("Done................")
 
 # -----------
-continuousCharacteristics = ["volume", "grossarea", "year_built", "year_renovated"]
+"""continuousCharacteristics = ["volume", "grossarea", "year_built", "year_renovated"]
 
 for char in continuousCharacteristics:
     print("Starting................")
     print(char)
 
-    nbOfBuildingByCharacteristic = 30
+    nbOfBuildingByCharacteristic = 100
     distribution_range = 6
 
     consumptionByContinuousCharacteristic(char, nbOfBuildingByCharacteristic=nbOfBuildingByCharacteristic,
                                           distribution_range=distribution_range)
-    print("Done................")
+    print("Done................")"""

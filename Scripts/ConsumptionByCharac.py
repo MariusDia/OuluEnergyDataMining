@@ -275,6 +275,7 @@ def consumptionByContinuousCharacteristic(characteristic, start_time=datetime(20
 
 # ---------
 categoricalCharacteristics = ["intended_use", "district_name", "year_built", "floorcount", "postal_code"]
+categoricalCharacteristics = ["intended_use"]
 
 for char in categoricalCharacteristics:
     print("Starting................")

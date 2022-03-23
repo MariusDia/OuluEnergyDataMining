@@ -12,7 +12,8 @@ forbiden_ids=list(map(float, forbiden_ids))
 class Characteristics():
     def __init__(self):
         if not exists("../Data/translated_metadata.pkl"):
-            bas_df = pd.read_csv('ids_properties.csv')
+            print("Downloading the metadata...")
+            bas_df = pd.read_csv('../Data/ids_properties.csv')
 
             # To remove buildings without records
             forbiden_df = bas_df[bas_df['property_id'].isin(forbiden_ids)]
@@ -20,6 +21,20 @@ class Characteristics():
 
             # Translate intended uses
             translateIntendedUse(bas_df)
+
+            # Change most recorded intended uses
+            useDict = {"511 Buildings for educational institutions": "Educational buildings",
+                       "231 Kindergartens": "Kindergartens",
+                       "214 Health Centers": "Health Centers",
+                       "359 Other sports and fitness buildings": "Sports and fitness buildings",
+                       "221 Retirement homes": "Retirement homes",
+                       "151 Office buildings": "Offices",
+                       "229 Other service plant buildings": "Plant buildings",
+                       "721 Fire stations": "Fire stations",
+                       "322 Libraries and archives": "Libraries",
+                       "719 Other storage buildings": "Storage buildings"}
+            for use in useDict.keys():
+                bas_df.loc[(bas_df.intended_use == use), 'intended_use'] = useDict[use]
 
             # Reseting indexes
             bas_df = bas_df.reset_index(drop=True)

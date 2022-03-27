@@ -33,7 +33,8 @@ start_time = datetime(2015, 1, 1, 0)
 end_time = datetime(2020, 1, 1, 0)
 
 # Getting the most recorded intended uses
-use_list = meta_df["intended_use"].value_counts()[4:5].index.to_list()
+use_list = meta_df["intended_use"].value_counts()[0:5].index.to_list()
+print(use_list)
 
 # Create directory if it doesn't exist
 dirName = '../Graphs/useConsumption/'
